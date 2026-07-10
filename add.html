@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Добавить объявление</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Y-FETISH</div>
+</header>
+
+<div class="add-form">
+
+<h2>Новое объявление</h2>
+
+<input type="text" id="name" placeholder="Имя">
+
+<select id="city">
+<option>Ивано-Франковск</option>
+<option>Львов</option>
+<option>Киев</option>
+<option>Одесса</option>
+<option>Днепр</option>
+</select>
+
+<select id="category">
+<option>Знакомства</option>
+<option>Эротический массаж</option>
+<option>Пары</option>
+<option>Транс</option>
+</select>
+
+<textarea
+id="description"
+placeholder="Описание"></textarea>
+
+<input
+type="file"
+id="photo"
+accept="image/*">
+
+<img
+id="preview"
+style="display:none;
+width:100%;
+margin-top:15px;
+border-radius:15px;">
+
+<button id="saveBtn">
+Опубликовать
+</button>
+
+</div>
+
+<script src="add.js"></script>
+
+</body>
+</html>
