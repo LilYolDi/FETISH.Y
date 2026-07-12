@@ -314,7 +314,6 @@ header,
 
 
 
-
 .vip-section{
     margin:30px 0;
 }
@@ -389,4 +388,40 @@ header,
 
 .open-btn:hover{
     background:#ff0000;
+}
+
+
+
+
+
+
+
+
+.tg-fixed-btn{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: linear-gradient(90deg,#00c6ff,#0088cc);
+    color: #ff0000;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0,170,255,.7);
+    z-index: 9999;
+    transition: .3s;
+}
+
+.tg-fixed-btn:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(0,170,255,1);
+}
+
+.tg-fixed-btn img{
+    width: 24px;
+    height: 24px;
 }
