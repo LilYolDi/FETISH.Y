@@ -108,12 +108,15 @@ background:#ff2255;
 
 
 
+
 .seo-content{
     max-width:900px;
-    margin:60px auto;
-    padding:20px;
+    margin:100vh auto 60px;
+    padding:40px 20px;
     color:#fff;
     line-height:1.8;
+    position:relative;
+    z-index:2;
 }
 
 .seo-content h2{
