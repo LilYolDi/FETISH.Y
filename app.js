@@ -3,25 +3,22 @@
 const menuBtn = document.getElementById("menuBtn");
 const menu = document.getElementById("menu");
 
-menuBtn.addEventListener("click", () => {
-    menu.classList.toggle("active");
-});
+if (menuBtn && menu) {
+    menuBtn.addEventListener("click", () => {
+        menu.classList.toggle("active");
+    });
+}
 
+// ======= Кнопки =======
 
-// ======= Переходы =======
+const loginBtn = document.getElementById("loginBtn");
+if (loginBtn) loginBtn.onclick = () => location.href = "login.html";
 
-document.getElementById("loginBtn").onclick = () => {
-    location.href = "login.html";
-};
+const registerBtn = document.getElementById("registerBtn");
+if (registerBtn) registerBtn.onclick = () => location.href = "register.html";
 
-document.getElementById("registerBtn").onclick = () => {
-    location.href = "register.html";
-};
-
-document.getElementById("addProfileBtn").onclick = () => {
-    location.href = "add.html";
-};
-
+const addProfileBtn = document.getElementById("addProfileBtn");
+if (addProfileBtn) addProfileBtn.onclick = () => location.href = "add.html";
 
 // ======= Объявления =======
 
@@ -29,38 +26,28 @@ let ads = JSON.parse(localStorage.getItem("ads")) || [];
 
 const adsBox = document.getElementById("ads");
 
-function showAds(list = ads){
+function showAds(list = ads) {
+
+    if (!adsBox) return;
 
     adsBox.innerHTML = "";
 
-    if(list.length===0){
-
+    if (list.length === 0) {
         adsBox.innerHTML = "<h2 style='text-align:center'>Объявлений пока нет</h2>";
-
         return;
-
     }
 
-    list.reverse().forEach((ad,index)=>{
+    [...list].reverse().forEach((ad, index) => {
 
         adsBox.innerHTML += `
-
         <div class="card" onclick="openAd(${index})">
-
             <img src="${ad.photo}">
-
             <div class="info">
-
                 <h2>${ad.name}</h2>
-
                 <p>${ad.city}</p>
-
                 <p>${ad.category}</p>
-
             </div>
-
         </div>
-
         `;
 
     });
@@ -69,34 +56,54 @@ function showAds(list = ads){
 
 showAds();
 
+// ======= Поиск VIP-карточек =======
 
-// ======= Поиск =======
+const city = document.getElementById("city");
+const category = document.getElementById("category");
+const searchInput = document.getElementById("searchInput");
 
-document.getElementById("searchBtn").onclick=()=>{
+function searchAll() {
 
-    let text=document.getElementById("searchInput").value.toLowerCase();
+    const selectedCity = city.value.toLowerCase();
+    const selectedCategory = category.value.toLowerCase();
+    const text = searchInput.value.toLowerCase();
 
-    let result=ads.filter(ad=>
+    document.querySelectorAll(".vip-card").forEach(card => {
 
-        ad.name.toLowerCase().includes(text) ||
+        const p = card.querySelectorAll("p");
 
-        ad.city.toLowerCase().includes(text) ||
+        const cardCity = p[0].textContent.toLowerCase();
+        const cardCategory = p[1].textContent.toLowerCase();
+        const cardText = card.textContent.toLowerCase();
 
-        ad.category.toLowerCase().includes(text)
+        const cityOk = selectedCity === "" || cardCity === selectedCity;
+        const categoryOk = selectedCategory === "" || cardCategory === selectedCategory;
+        const textOk = text === "" || cardText.includes(text);
 
-    );
+        if (cityOk && categoryOk && textOk) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
 
-    showAds(result);
+    });
 
-};
+}
 
+if (city) city.addEventListener("change", searchAll);
+if (category) category.addEventListener("change", searchAll);
+if (searchInput) searchInput.addEventListener("input", searchAll);
+
+const searchBtn = document.getElementById("searchBtn");
+if (searchBtn) {
+    searchBtn.addEventListener("click", searchAll);
+}
+
+searchAll();
 
 // ======= Открыть объявление =======
 
-function openAd(i){
-
-    localStorage.setItem("currentAd",i);
-
-    location.href="ad.html";
-
+function openAd(i) {
+    localStorage.setItem("currentAd", i);
+    location.href = "ad.html";
 }
