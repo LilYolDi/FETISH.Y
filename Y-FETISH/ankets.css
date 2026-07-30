@@ -26,25 +26,15 @@ body{
 =========================== */
 
 .header{
-
     background:#000;
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
-    padding:10px 25px;
-
+    padding:10px 15px;
     position:sticky;
-
     top:0;
-
     z-index:100;
-
     border-bottom:1px solid #222;
-
 }
 
 
@@ -426,13 +416,15 @@ footer{
 
 
 .header{
-
-    flex-direction:column;
-
-    gap:15px;
-
-    padding:15px;
-
+    background:#000;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 15px;
+    border-bottom:1px solid #222;
+    position:sticky;
+    top:0;
+    z-index:100;
 }
 
 
@@ -747,23 +739,26 @@ footer{
 }
 
 
-.add-profile {
+.add-profile{
     background:#d00000;
-    color:white;
+    color:#fff;
     text-decoration:none;
-    padding:8px 12px;
-    border-radius:8px;
-    display:inline-block;
-    font-size:14px;
+    padding:12px 18px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    font-weight:bold;
+    white-space:nowrap;
 }
 
 .header-buttons {
-    position:absolute;
-    right:10px;
-    top:5px;
-    display:flex;
-    gap:8px;
-    align-items:center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    position: static;
 }
 
 
