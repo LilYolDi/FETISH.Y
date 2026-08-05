@@ -332,35 +332,6 @@ allButton.classList.add("active");
 render();
 
 
-/* ===========================
-   КНОПКА ОТКРЫТИЯ МЕНЮ
-=========================== */
-
-const menuButton = document.getElementById("menuButton");
-
-
-/* ===========================
-   ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ
-=========================== */
-
-const sideMenu = document.getElementById("sideMenu");
-
-
-
-/* ===========================
-   ОТКРЫТИЕ / ЗАКРЫТИЕ МЕНЮ
-=========================== */
-
-menuButton.addEventListener("click", ()=>{
-
-
-    // Добавляем или убираем класс открытия
-
-    sideMenu.classList.toggle("open");
-
-
-});
-
 
 
 /* ===========================
