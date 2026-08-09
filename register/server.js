@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const crypto = require("crypto");
 const path = require("path");
+
 require("dotenv").config();
 
 const app = express();
@@ -10,9 +11,13 @@ const PORT = process.env.PORT || 3000;
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 if (!BOT_TOKEN) {
-    console.error("ERROR: TELEGRAM_BOT_TOKEN is not set in .env");
+    console.error(
+        "ERROR: TELEGRAM_BOT_TOKEN is not set"
+    );
+
     process.exit(1);
 }
+
 
 // ========================================
 // MIDDLEWARE
@@ -32,12 +37,14 @@ app.use(
 
         cookie: {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "lax",
-            maxAge: 1000 * 60 * 60 * 24 * 7
+            maxAge:
+                1000 * 60 * 60 * 24 * 7
         }
     })
 );
+
 
 // ========================================
 // STATIC FILES
@@ -48,6 +55,7 @@ app.use(
         path.join(__dirname, "public")
     )
 );
+
 
 // ========================================
 // TELEGRAM VERIFICATION
@@ -62,9 +70,14 @@ function verifyTelegram(data) {
     const receivedHash = data.hash;
 
     const checkData = Object.keys(data)
-        .filter(key => key !== "hash")
+        .filter(
+            key => key !== "hash"
+        )
         .sort()
-        .map(key => `${key}=${data[key]}`)
+        .map(
+            key =>
+                ${key}=${data[key]}
+        )
         .join("\n");
 
     const secretKey = crypto
@@ -80,28 +93,37 @@ function verifyTelegram(data) {
         .update(checkData)
         .digest("hex");
 
-    if (calculatedHash !== receivedHash) {
+    if (
+        calculatedHash !== receivedHash
+    ) {
         return false;
     }
 
-    // Проверяем время авторизации Telegram
-
-    const authDate = Number(data.auth_date);
+    const authDate =
+        Number(data.auth_date);
 
     if (!authDate) {
         return false;
     }
 
-    const now = Math.floor(Date.now() / 1000);
+    const now =
+        Math.floor(
+            Date.now() / 1000
+        );
 
-    const age = now - authDate;
+    const age =
+        now - authDate;
 
-    if (age < 0 || age > 86400) {
+    if (
+        age < 0 ||
+        age > 86400
+    ) {
         return false;
     }
 
     return true;
 }
+
 
 // ========================================
 // TELEGRAM LOGIN
@@ -113,23 +135,24 @@ app.post(
 
         try {
 
-            const telegramUser = req.body;
+            const telegramUser =
+                req.body;
 
-            const valid =
-                verifyTelegram(
+            if (
+                !verifyTelegram(
                     telegramUser
-                );
+                )
+            ) {
 
-            if (!valid) {
-
-                return res.status(401).json({
-                    success: false,
-                    error:
-                        "Недействительные данные Telegram"
-                });
+                return res
+                    .status(401)
+                    .json({
+                        success: false,
+                        error:
+                            "Недействительные данные Telegram"
+                    });
             }
 
-            // Сохраняем пользователя в сессии
 
             req.session.user = {
 
@@ -153,28 +176,61 @@ app.post(
                     ""
             };
 
-            return res.json({
 
-                success: true,
+            req.session.save(
+                err => {
 
-                user:
-                    req.session.user
-            });
+                    if (err) {
+
+                        console.error(
+                            "SESSION SAVE ERROR:",
+                            err
+                        );
+
+                        return res
+                            .status(500)
+                            .json({
+                                success: false,
+                                error:
+                                    "Не удалось сохранить сессию"
+                            });
+                    }
+
+
+                    return res.json({
+
+                        success: true,
+
+                        user:
+                            req.session.user
+
+
+
+
+});
+                }
+            );
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "AUTH ERROR:",
+                error
+            );
 
-            return res.status(500).json({
+            return res
+                .status(500)
+                .json({
 
-                success: false,
+                    success: false,
 
-                error:
-                    "Ошибка сервера"
-            });
+                    error:
+                        "Ошибка сервера"
+                });
         }
     }
 );
+
 
 // ========================================
 // CURRENT USER
@@ -184,7 +240,9 @@ app.get(
     "/auth/me",
     (req, res) => {
 
-        if (!req.session.user) {
+        if (
+            !req.session.user
+        ) {
 
             return res.json({
                 loggedIn: false
@@ -201,9 +259,9 @@ app.get(
     }
 );
 
+
 // ========================================
 // LOGOUT
-
 // ========================================
 
 app.post(
@@ -215,14 +273,23 @@ app.post(
 
                 if (err) {
 
-                    return res.status(500).json({
-                        success: false
-                    });
+                    console.error(
+                        "LOGOUT ERROR:",
+                        err
+                    );
+
+                    return res
+                        .status(500)
+                        .json({
+                            success: false
+                        });
                 }
+
 
                 res.clearCookie(
                     "connect.sid"
                 );
+
 
                 return res.json({
                     success: true
@@ -232,6 +299,7 @@ app.post(
     }
 );
 
+
 // ========================================
 // PROTECTED PROFILE
 // ========================================
@@ -240,14 +308,19 @@ app.get(
     "/api/profile",
     (req, res) => {
 
-        if (!req.session.user) {
+        if (
+            !req.session.user
+        ) {
 
-            return res.status(401).json({
+            return res
+                .status(401)
+                .json({
 
-                error:
-                    "Вы не авторизованы"
-            });
+                    error:
+                        "Вы не авторизованы"
+                });
         }
+
 
         return res.json({
 
@@ -258,6 +331,7 @@ app.get(
         });
     }
 );
+
 
 // ========================================
 // MAIN PAGE
@@ -277,6 +351,7 @@ app.get(
     }
 );
 
+
 // ========================================
 // START SERVER
 // ========================================
@@ -284,8 +359,6 @@ app.get(
 app.listen(
     PORT,
     () => {
-
-        console.log("");
 
         console.log(
             "================================="
@@ -300,9 +373,12 @@ app.listen(
         );
 
         console.log(
-            "Server started on port " + PORT
+            "Server started on port " +
+            PORT
         );
 
-        console.log("");
+        console.log(
+            "================================="
+        );
     }
 );
