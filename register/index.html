@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Y-FETISH</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #080808;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            height: 70px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+
+            padding: 0 30px;
+
+            background: #111;
+
+            border-bottom:
+                1px solid #252525;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #ff3030;
+        }
+
+        .account {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+        }
+
+        .username {
+            color: #aaa;
+        }
+
+        button {
+            border: 0;
+
+            background: #ff3030;
+
+            color: white;
+
+            padding: 9px 14px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+        }
+
+        main {
+            padding: 60px 30px;
+
+            text-align: center;
+        }
+
+        .login {
+            display: inline-block;
+
+            margin-top: 20px;
+
+            padding: 12px 22px;
+
+            background: #ff3030;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        <span>Y</span>-FETISH
+    </div>
+
+
+    <div
+        id="account"
+        class="account"
+    ></div>
+
+</header>
+
+
+<main>
+
+    <h1>
+        Добро пожаловать в Y-FETISH
+    </h1>
+
+    <p id="message">
+        Проверяем авторизацию...
+    </p>
+
+    <a
+        id="login"
+        class="login"
+        href="login.html"
+    >
+        Войти через Telegram
+    </a>
+
+</main>
+
+
+<script>
+
+async function loadAccount() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/auth/me"
+            );
+
+        const data =
+            await response.json();
+
+
+        const account =
+            document.getElementById(
+                "account"
+            );
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+        const login =
+            document.getElementById(
+                "login"
+            );
+
+
+        if (
+            data.loggedIn &&
+            data.user
+        ) {
+
+            const user =
+                data.user;
+
+
+            account.innerHTML = `
+
+                ${
+                    user.photo_url
+                    ? `
+                        <img
+                            class="avatar"
+                            src="${escapeHtml(
+                                user.photo_url
+                            )}"
+                        >
+                    `
+                    : ""
+                }
+
+                <div>
+                    ${
+                        escapeHtml(
+                            user.first_name
+                            || "Пользователь"
+                        )
+                    }
+
+                    ${
+                        user.username
+                        ? `
+                            <div class="username">
+                                @${escapeHtml(
+                                    user.username
+                                )}
+                            </div>
+                        `
+                        : ""
+                    }
+                </div>
+
+                <button
+                    onclick="logout()"
+                >
+                    Выйти
+                </button>
+            `;
+
+
+            message.textContent =
+                "Вы авторизованы в Y-FETISH";
+				
+				
+
+
+
+
+login.style.display =
+                "none";
+
+
+        } else {
+
+            message.textContent =
+                "Вы не авторизованы";
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+    }
+}
+
+
+// =================================
+// LOGOUT
+// =================================
+
+async function logout() {
+
+    await fetch(
+        "/auth/logout",
+        {
+            method: "POST"
+        }
+    );
+
+
+    window.location.reload();
+}
+
+
+// =================================
+// HTML ESCAPE
+// =================================
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+}
+
+
+loadAccount();
+
+</script>
+
+</body>
+</html>				
