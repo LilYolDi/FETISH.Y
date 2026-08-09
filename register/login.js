@@ -1,246 +1,340 @@
-const BOT_USERNAME = "FETISH_Y_bot";
+const express = require("express");
+const session = require("express-session");
+const crypto = require("crypto");
+const path = require("path");
 
-const statusEl = document.getElementById("status");
-const accountEl = document.getElementById("account");
-const avatarEl = document.getElementById("avatar");
-const accountNameEl = document.getElementById("account-name");
-const accountUsernameEl = document.getElementById("account-username");
-const logoutBtn = document.getElementById("logout");
-const widget = document.getElementById("telegram-widget");
+require("dotenv").config();
 
+const app = express();
 
-// ========================================
-// TELEGRAM WIDGET
-// ========================================
+const PORT = process.env.PORT || 3000;
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
-function loadTelegramWidget() {
-
-    if (!widget) {
-        console.error("Telegram widget container not found");
-        return;
-    }
-
-    const script = document.createElement("script");
-
-    script.async = true;
-
-    script.src =
-        "https://telegram.org/js/telegram-widget.js?22";
-
-    script.setAttribute(
-        "data-telegram-login",
-        BOT_USERNAME
-    );
-
-    script.setAttribute(
-        "data-size",
-        "large"
-    );
-
-    script.setAttribute(
-        "data-userpic",
-        "true"
-    );
-
-    script.setAttribute(
-        "data-request-access",
-        "write"
-    );
-
-    script.setAttribute(
-        "data-onauth",
-        "onTelegramAuth(user)"
-    );
-
-    widget.appendChild(script);
+if (!BOT_TOKEN) {
+    console.error("ERROR: TELEGRAM_BOT_TOKEN is not set");
+    process.exit(1);
 }
 
+// Render работает через HTTPS-прокси
+app.set("trust proxy", 1);
+
 
 // ========================================
-// TELEGRAM CALLBACK
+// MIDDLEWARE
 // ========================================
 
-window.onTelegramAuth = async function (telegramUser) {
+app.use(express.json());
 
-    setStatus("Проверяем Telegram...");
+app.use(
+    session({
+        secret:
+            process.env.SESSION_SECRET ||
+            crypto.randomBytes(32).toString("hex"),
 
-    try {
+        resave: false,
 
-        const response = await fetch(
-            "/auth/telegram",
-            {
-                method: "POST",
+        saveUninitialized: false,
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify(telegramUser)
-            }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.error || "Ошибка авторизации"
-            );
+        cookie: {
+            httpOnly: true,
+            secure: true,
+            sameSite: "lax",
+            maxAge: 1000 * 60 * 60 * 24 * 7
         }
-
-        showAccount(data.user);
-
-        setStatus(
-            "Вы вошли в Y-FETISH",
-            "success"
-        );
-
-        setTimeout(() => {
-
-            window.location.href = "/";
-
-        }, 700);
-
-    } catch (error) {
-
-        console.error(error);
-
-        setStatus(
-            error.message || "Ошибка входа",
-            "error"
-        );
-    }
-};
+    })
+);
 
 
 // ========================================
-// CURRENT USER
+// STATIC FILES
 // ========================================
 
-async function checkSession() {
+app.use(
+    express.static(
+        path.join(__dirname, "public")
+    )
+);
 
-    try {
 
-        const response = await fetch(
-            "/auth/me"
-        );
+// ========================================
+// TELEGRAM VERIFICATION
+// ========================================
 
-        const data = await response.json();
+function verifyTelegram(data) {
 
-        if (
-            data.loggedIn &&
-            data.user
-        ) {
-
-            showAccount(data.user);
-
-            setStatus(
-                "Вы уже авторизованы",
-                "success"
-            );
-        }
-
-    } catch (error) {
-
-        console.error(error);
+    if (!data || !data.hash) {
+        return false;
     }
+
+    const receivedHash = data.hash;
+
+    const checkData = Object.keys(data)
+        .filter(key => key !== "hash")
+        .sort()
+        .map(key => `${key}=${data[key]}`)
+        .join("\n");
+
+    const secretKey = crypto
+        .createHash("sha256")
+        .update(BOT_TOKEN)
+        .digest();
+
+    const calculatedHash = crypto
+        .createHmac("sha256", secretKey)
+        .update(checkData)
+        .digest("hex");
+
+    if (calculatedHash !== receivedHash) {
+        return false;
+    }
+
+    const authDate = Number(data.auth_date);
+
+    if (!authDate) {
+        return false;
+    }
+
+    const now = Math.floor(Date.now() / 1000);
+    const age = now - authDate;
+
+    if (age < 0 || age > 86400) {
+        return false;
+    }
+
+    return true;
 }
 
 
 // ========================================
-// SHOW ACCOUNT
+// TELEGRAM LOGIN
 // ========================================
 
-function showAccount(user) {
-
-    accountEl.classList.remove("hidden");
-
-    if (user.photo_url) {
-
-        avatarEl.src = user.photo_url;
-
-        avatarEl.style.display = "block";
-
-    } else {
-
-        avatarEl.style.display = "none";
-    }
-
-    const fullName = [
-        user.first_name,
-        user.last_name
-    ]
-    .filter(Boolean)
-    .join(" ");
-
-    accountNameEl.textContent =
-        fullName || "Пользователь";
-
-    accountUsernameEl.textContent =
-        user.username
-            ? "@" + user.username
-            : "Telegram";
-}
-
-
-// ========================================
-// LOGOUT
-// ========================================
-
-logoutBtn.addEventListener(
-    "click",
-    async () => {
+app.post(
+    "/auth/telegram",
+    (req, res) => {
 
         try {
 
-            await fetch(
-                "/auth/logout",
-                {
-                    method: "POST"
+            const telegramUser = req.body;
+
+            if (!verifyTelegram(telegramUser)) {
+
+                return res
+                    .status(401)
+                    .json({
+                        success: false,
+                        error:
+                            "Недействительные данные Telegram"
+                    });
+            }
+
+            req.session.user = {
+
+                telegram_id:
+                    telegramUser.id,
+
+                first_name:
+                    telegramUser.first_name || "",
+
+                last_name:
+                    telegramUser.last_name || "",
+
+                username:
+                    telegramUser.username || "",
+
+                photo_url:
+                    telegramUser.photo_url || ""
+            };
+
+            req.session.save(
+                err => {
+
+                    if (err) {
+
+                        console.error(
+                            "SESSION SAVE ERROR:",
+                            err
+                        );
+
+                        return res
+                            .status(500)
+                            .json({
+                                success: false,
+                                error:
+                                    "Не удалось сохранить сессию"
+                            });
+                    }
+
+                    return res.json({
+
+                        success: true,
+
+                        user:
+                            req.session.user
+                    });
                 }
-            );
-
-            accountEl.classList.add("hidden");
-
-            setStatus(
-                "Вы вышли из аккаунта"
             );
 
         } catch (error) {
 
-            console.error(error);
-
-            setStatus(
-
-
-"Ошибка выхода",
-                "error"
+            console.error(
+                "AUTH ERROR:",
+                error
             );
+
+            return res
+                .status(500)
+                .json({
+                    success: false,
+                    error:
+
+
+
+"Ошибка сервера"
+                });
         }
     }
 );
 
 
 // ========================================
-// STATUS
+// CURRENT USER
 // ========================================
 
-function setStatus(
-    text,
-    type = ""
-) {
+app.get(
+    "/auth/me",
+    (req, res) => {
 
-    statusEl.textContent = text;
+        if (!req.session.user) {
 
-    statusEl.className =
-        "status " + type;
-}
+            return res.json({
+                loggedIn: false
+            });
+        }
+
+        return res.json({
+
+            loggedIn: true,
+
+            user:
+                req.session.user
+        });
+    }
+);
 
 
 // ========================================
-// START
+// LOGOUT
 // ========================================
 
-loadTelegramWidget();
+app.post(
+    "/auth/logout",
+    (req, res) => {
 
-checkSession();
+        req.session.destroy(
+            err => {
+
+                if (err) {
+
+                    console.error(
+                        "LOGOUT ERROR:",
+                        err
+                    );
+
+                    return res
+                        .status(500)
+                        .json({
+                            success: false
+                        });
+                }
+
+                res.clearCookie(
+                    "connect.sid"
+                );
+
+                return res.json({
+                    success: true
+                });
+            }
+        );
+    }
+);
+
+
+// ========================================
+// PROTECTED PROFILE
+// ========================================
+
+app.get(
+    "/api/profile",
+    (req, res) => {
+
+        if (!req.session.user) {
+
+            return res
+                .status(401)
+                .json({
+                    error:
+                        "Вы не авторизованы"
+                });
+        }
+
+        return res.json({
+
+            success: true,
+
+            profile:
+                req.session.user
+        });
+    }
+);
+
+
+// ========================================
+// MAIN PAGE
+// ========================================
+
+app.get(
+    "/",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "index.html"
+            )
+        );
+    }
+);
+
+
+// ========================================
+// START SERVER
+// ========================================
+
+app.listen(
+    PORT,
+    () => {
+
+        console.log(
+            "================================="
+        );
+
+        console.log(
+            " Y-FETISH SERVER"
+        );
+
+        console.log(
+            "================================="
+        );
+
+        console.log(
+            "Server started on port " + PORT
+        );
+
+        console.log(
+            "================================="
+        );
+    }
+);
