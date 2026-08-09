@@ -1,48 +1,69 @@
 function setStatus(text, type) {
-    const status = document.getElementById("status");
 
-    if (!status) return;
+    const status =
+        document.getElementById("status");
+
+    if (!status) {
+        return;
+    }
 
     status.textContent = text;
-    status.className = "status " + (type || "");
+
+    status.className =
+        "status " + (type || "");
 }
 
 
 window.onTelegramAuth = async function (telegramUser) {
 
-    console.log("Telegram callback получен:", telegramUser);
+    console.log(
+        "Telegram authorization received:",
+        telegramUser
+    );
 
-    setStatus("Проверяем Telegram...");
+    setStatus(
+        "Проверяем Telegram..."
+    );
 
 
     try {
 
-        const response = await fetch(
-            "https://fetish-y.onrender.com/auth/telegram",
-            {
-                method: "POST",
+        const response =
+            await fetch(
+                "https://fetish-y.onrender.com/auth/telegram",
+                {
+                    method: "POST",
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                credentials: "include",
+                    credentials: "include",
 
-                body: JSON.stringify(telegramUser)
-            }
+                    body:
+                        JSON.stringify(
+                            telegramUser
+                        )
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Server response:",
+            data
         );
-
-
-        const data = await response.json();
-
-
-        console.log("Ответ сервера:", data);
 
 
         if (!response.ok) {
 
             throw new Error(
-                data.error || "Ошибка авторизации"
+                data.error ||
+                "Ошибка авторизации"
             );
         }
 
@@ -53,25 +74,31 @@ window.onTelegramAuth = async function (telegramUser) {
         );
 
 
-        console.log("АВТОРИЗАЦИЯ УСПЕШНА");
+        /*
+         * Успешная авторизация.
+         * Переходим на главную страницу.
+         */
+
+        window.location.href =
+            "https://lilyoldi.github.io/FETISH.Y/index.html";
+
+    }
 
 
-        // Переход на главную страницу
-        window.location.assign(
-            "https://lilyoldi.github.io/FETISH.Y/index.html"
-        );
-
-    } catch (error) {
+    catch (error) {
 
         console.error(
-            "Ошибка авторизации:",
+            "AUTH ERROR:",
             error
         );
 
 
         setStatus(
-            error.message || "Ошибка входа",
+            error.message ||
+            "Ошибка входа",
             "error"
         );
+
     }
+
 };
