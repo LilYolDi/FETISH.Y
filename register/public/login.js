@@ -1,6 +1,19 @@
+function setStatus(text, type) {
+    const status = document.getElementById("status");
+
+    if (!status) return;
+
+    status.textContent = text;
+    status.className = "status " + (type || "");
+}
+
+
 window.onTelegramAuth = async function (telegramUser) {
 
+    console.log("Telegram callback получен:", telegramUser);
+
     setStatus("Проверяем Telegram...");
+
 
     try {
 
@@ -19,7 +32,12 @@ window.onTelegramAuth = async function (telegramUser) {
             }
         );
 
+
         const data = await response.json();
+
+
+        console.log("Ответ сервера:", data);
+
 
         if (!response.ok) {
 
@@ -28,18 +46,28 @@ window.onTelegramAuth = async function (telegramUser) {
             );
         }
 
+
         setStatus(
             "Вы вошли в Y-FETISH",
             "success"
         );
 
+
+        console.log("АВТОРИЗАЦИЯ УСПЕШНА");
+
+
         // Переход на главную страницу
-        window.location.href =
-            "https://lilyoldi.github.io/FETISH.Y/index.html";
+        window.location.assign(
+            "https://lilyoldi.github.io/FETISH.Y/index.html"
+        );
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Ошибка авторизации:",
+            error
+        );
+
 
         setStatus(
             error.message || "Ошибка входа",
