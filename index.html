@@ -1,323 +1,393 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y-FETISH — сайт фетиш знакомств</title>
 
-    <meta charset="UTF-8">
+<meta name="description" content="Y-FETISH — сайт фетиш знакомств. Видео, анкеты, общение, Telegram и новые знакомства для людей с разными интересами.">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta name="keywords" content="Y-FETISH, фетиш, знакомства, фут фетиш, BDSM, Telegram">
 
-    <title>Y-FETISH</title>
+<meta name="robots" content="index, follow">
 
-    <style>
 
-        * {
-            box-sizing: border-box;
-        }
 
-        body {
-            margin: 0;
-            background: #080808;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
+<link rel="stylesheet" href="style.css">
 
-        header {
-            height: 70px;
+<link rel="icon" type="image/jpeg" href="fav.jpg">
 
-            display: flex;
-
-            align-items: center;
-
-            justify-content:
-                space-between;
-
-            padding: 0 30px;
-
-            background: #111;
-
-            border-bottom:
-                1px solid #252525;
-        }
-
-        .logo {
-            font-size: 27px;
-            font-weight: bold;
-        }
-
-        .logo span {
-            color: #ff3030;
-        }
-
-        .account {
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-
-            border-radius: 50%;
-
-            object-fit: cover;
-        }
-
-        .username {
-            color: #aaa;
-        }
-
-        button {
-            border: 0;
-
-            background: #ff3030;
-
-            color: white;
-
-            padding: 9px 14px;
-
-            border-radius: 7px;
-
-            cursor: pointer;
-        }
-
-        main {
-            padding: 60px 30px;
-
-            text-align: center;
-        }
-
-        .login {
-            display: inline-block;
-
-            margin-top: 20px;
-
-            padding: 12px 22px;
-
-            background: #ff3030;
-
-            color: white;
-
-            text-decoration: none;
-
-            border-radius: 8px;
-        }
-
-    </style>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
-
 <body>
-
 
 <header>
 
-    <div class="logo">
-        <span>Y</span>-FETISH
-    </div>
+<div class="logo">
+Y-FETISH
+</div>
 
+<div class="header-buttons">
 
-    <div
-        id="account"
-        class="account"
-    ></div>
+<button id="accountBtn" style="display: none;">
+    <i class="fas fa-user"></i>
+    <span>Аккаунт</span>
+</button>
+
+<button id="menuBtn">
+    <i class="fas fa-bars"></i>
+</button>
+
+</div>
 
 </header>
 
 
-<main>
+<section class="addSection">
 
-    <h1>
-        Добро пожаловать в Y-FETISH
-    </h1>
+<a href="tg://resolve?domain=Godelsi" target="_blank" class="telegram-menu">
+    📨 Подать объявление
+</a>
+</div>
 
-    <p id="message">
-        Проверяем авторизацию...
-    </p>
 
-    <a
-        id="login"
-        class="login"
-        href="login.html"
-    >
-        Войти через Telegram
-    </a>
 
-</main>
 
+</section>
+
+
+<section class="searchBox">
+
+<select id="country">
+    <option value="">Выберите страну</option>
+    <option value="ua">Украина</option>
+    <option value="ru">Россия</option>
+</select>
+
+<select id="city">
+    <option value="">Выберите город</option>
+</select>
+
+<select id="category">
+<option value="">Все цели</option>
+<option>Знакомства</option>
+<option>Эротический массаж</option>
+<option>Госпожа</option>
+<option>раб</option>
+</select>
+
+<div class="search">
+
+<input
+id="searchInput"
+type="text"
+placeholder="Поиск объявлений">
+
+<button id="searchBtn">
+
+<i class="fas fa-search"></i>
+
+</button>
+
+</div>
+
+<section class="vip-section">
+
+    <h2>⭐ VIP объявления</h2>
+
+    <div class="vip-posts">
+
+        <div class="vip-card">
+            <span class="vip-label">VIP</span>
+
+            <img src="images/vip00.jpg">
+
+            <div class="vip-info">
+                <h3>Y-FETISH | ЗНАКОМСТВА</h3>
+                <p>Чат где ты можешь найти свою Госпожу</p>
+                <p>Знакомства</p>
+
+                <a href="https://t.me/Y_FETISH" target="_blank" class="open-btn">
+                 Y-FETISH ЧАТ
+                </a>
+				
+            </div>
+        </div>
+
+        <div class="vip-card">
+            <span class="vip-label">VIP</span>
+
+            <img src="images/vip2.jpg">
+
+            <div class="vip-info">
+                <h3>Карина, 24</h3>
+                <p>Ивано-Франковск</p>
+                <p>Знакомства</p>
+				
+                <p>Описание</p>
+
+                <a href="https://t.me/karina_username" target="_blank" class="open-btn">
+                 Открыть
+                </a>
+				
+            </div>
+        </div>
+
+        <div class="vip-card">
+            <span class="vip-label">VIP</span>
+
+            <img src="images/vip3.jpg">
+
+            <div class="vip-info">
+                <h3>Вика, 23</h3>
+                <p>Ивано-Франковск</p>
+                <p>Знакомства</p>
+				
+                <p>Описание</p>
+				
+                <a href="https://t.me/karina_username" target="_blank" class="open-btn">
+                 Открыть
+                </a>
+				
+            </div>
+        </div>
+
+        <div class="vip-card">
+            <span class="vip-label">VIP</span>
+
+            <img src="images/vip4.jpg">
+
+            <div class="vip-info">
+                <h3>Маша, 25</h3>
+                <p>Ивано-Франковск</p>
+                <p>Знакомства</p>
+							
+                <p>Описание</p>
+
+                <a href="https://t.me/karina_username" target="_blank" class="open-btn">
+                 Открыть
+                </a>
+				
+
+				
+            </div>
+        </div>
+
+    </div>
+
+
+
+<div id="posts"></div>
+
+</section>
+
+
+
+
+
+<section class="vip-section">
+
+    <h2>📋 Объявления</h2>
+
+    <div class="vip-posts">
+
+        <!-- ВСТАВЛЯЙ КАРТОЧКИ СЮДА -->
+		
+        <div class="vip-card">
+            <span class="vip-label">ПРИМЕР АНКЕТЫ</span>
+
+            <img src="images/vip000.jpg">
+
+            <div class="vip-info">
+                <h3>Ваше имя.</h3>
+                <p>Ваш город.</p>
+                <p>Ваша цель.</p>
+                <p>Ваше описание.</p>
+
+                <a href="tg://resolve?domain=Godelsi" target="_blank" class="open-btn">
+                 Подать объявление
+                </a>
+				
+            </div>
+        </div>	
+
+        <div class="vip-card">
+            <span class="vip-label">250 грн</span>
+
+            <img src="images/vip0.jpg">
+
+            <div class="vip-info">
+                <h3>Алина, 22</h3>
+                <p>Львов</p>
+                <p>Знакомства</p>
+				
+                <p>Описание</p>
+
+                <a href="https://t.me/karina_username" target="_blank" class="open-btn">
+                 Открыть
+                </a>
+				
+            </div>
+        </div>
+
+        <div class="vip-card">
+            <span class="vip-label">250 грн</span>
+
+            <img src="images/vip0.jpg">
+
+            <div class="vip-info">
+                <h3>Алина, 22</h3>
+                <p>Львов</p>
+                <p>Знакомства</p>
+				
+                <p>Описание</p>
+
+                <a href="https://t.me/karina_username" target="_blank" class="open-btn">
+                 Открыть
+                </a>
+				
+            </div>
+        </div>
+		
+        <div class="vip-card">
+            <span class="vip-label">250 грн</span>
+
+            <img src="images/vip0.jpg">
+
+            <div class="vip-info">
+                <h3>Алина, 22</h3>
+                <p>Львов</p>
+                <p>Знакомства</p>
+				
+                <p>Описание</p>
+
+                <a href="https://t.me/karina_username" target="_blank" class="open-btn">
+                 Открыть
+                </a>
+				
+            </div>
+        </div>
+
+        <div class="vip-card">
+            <span class="vip-label">250 грн</span>
+
+            <img src="images/vip0.jpg">
+
+            <div class="vip-info">
+                <h3>Алина, 22</h3>
+                <p>Львов</p>
+                <p>Знакомства</p>
+				
+                <p>Описание</p>
+
+                <a href="https://t.me/karina_username" target="_blank" class="open-btn">
+                 Открыть
+                </a>
+				
+            </div>
+        </div>
+
+        <div class="vip-card">
+            <span class="vip-label">250 грн</span>
+
+            <img src="images/vip0.jpg">
+
+            <div class="vip-info">
+                <h3>Алина, 22</h3>
+                <p>Львов</p>
+                <p>Знакомства</p>
+				
+                <p>Описание</p>
+
+                <a href="https://t.me/karina_username" target="_blank" class="open-btn">
+                 Открыть
+                </a>
+				
+            </div>
+        </div>
+
+        <div class="vip-card">
+            <span class="vip-label">250 грн</span>
+
+            <img src="images/vip0.jpg">
+
+            <div class="vip-info">
+                <h3>Алина, 22</h3>
+                <p>Львов</p>
+                <p>Знакомства</p>
+				
+                <p>Описание</p>
+
+                <a href="https://t.me/karina_username" target="_blank" class="open-btn">
+                 Открыть
+                </a>
+				
+            </div>
+        </div>
+
+        <div class="vip-card">
+            <span class="vip-label">250 грн</span>
+
+            <img src="images/vip0.jpg">
+
+            <div class="vip-info">
+                <h3>Алина, 22</h3>
+                <p>Львов</p>
+                <p>Знакомства</p>
+				
+                <p>Описание</p>
+
+                <a href="https://t.me/karina_username" target="_blank" class="open-btn">
+                 Открыть
+                </a>
+				
+            </div>
+        </div>		
+		
+</div>
+
+</section>
+
+
+<section id="ads">
+
+</section>
+
+
+<div id="menu" class="menu">
+
+<a href="home/index.html">
+Главная
+</a>
+
+<a href="chats/index.html">
+Реклама чатов
+</a>
+
+<a href="Y-FETISH/index.html">
+Как купить рекламу❓
+</a>
+
+<a href="tg://resolve?domain=Godelsi" target="_blank" class="telegram-menu">
+    📨 Подать объявление
+</a>
+</div>
+
+<script src="app.js"></script>
+
+
+<a href="https://t.me/Y_FETISH" class="tg-fixed-btn" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="">
+    Y-FETISH ЧАТ
+</a>
 
 <script>
-
-async function loadAccount() {
-
-    try {
-
-        const response =
-            await fetch(
-                "/auth/me"
-            );
-
-        const data =
-            await response.json();
-
-
-        const account =
-            document.getElementById(
-                "account"
-            );
-
-        const message =
-            document.getElementById(
-                "message"
-            );
-
-        const login =
-            document.getElementById(
-                "login"
-            );
-
-
-        if (
-            data.loggedIn &&
-            data.user
-        ) {
-
-            const user =
-                data.user;
-
-
-            account.innerHTML = `
-
-                ${
-                    user.photo_url
-                    ? `
-                        <img
-                            class="avatar"
-                            src="${escapeHtml(
-                                user.photo_url
-                            )}"
-                        >
-                    `
-                    : ""
-                }
-
-                <div>
-                    ${
-                        escapeHtml(
-                            user.first_name
-                            || "Пользователь"
-                        )
-                    }
-
-                    ${
-                        user.username
-                        ? `
-                            <div class="username">
-                                @${escapeHtml(
-                                    user.username
-                                )}
-                            </div>
-                        `
-                        : ""
-                    }
-                </div>
-
-                <button
-                    onclick="logout()"
-                >
-                    Выйти
-                </button>
-            `;
-
-
-            message.textContent =
-                "Вы авторизованы в Y-FETISH";
-				
-				
-
-
-
-
-login.style.display =
-                "none";
-
-
-        } else {
-
-            message.textContent =
-                "Вы не авторизованы";
-        }
-
-
-    } catch (error) {
-
-        console.error(error);
-    }
-}
-
-
-// =================================
-// LOGOUT
-// =================================
-
-async function logout() {
-
-    await fetch(
-        "/auth/logout",
-        {
-            method: "POST"
-        }
-    );
-
-
-    window.location.reload();
-}
-
-
-// =================================
-// HTML ESCAPE
-// =================================
-
-function escapeHtml(value) {
-
-    return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-}
-
-
-loadAccount();
-
+document.getElementById("accountBtn").addEventListener("click", function () {
+    window.location.href = "account.html";
+});
 </script>
 
 </body>
-</html>				
+</html>
