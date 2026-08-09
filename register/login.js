@@ -14,6 +14,7 @@ const widget = document.getElementById("telegram-widget");
 // ========================================
 
 function loadTelegramWidget() {
+
     if (!widget) {
         console.error("Telegram widget container not found");
         return;
@@ -96,7 +97,7 @@ window.onTelegramAuth = async function (telegramUser) {
 
         setTimeout(() => {
 
-            window.location.href = "index.html";
+            window.location.href = "/";
 
         }, 700);
 
@@ -212,7 +213,7 @@ logoutBtn.addEventListener(
             setStatus(
 
 
-  "Ошибка выхода",
+"Ошибка выхода",
                 "error"
             );
         }
@@ -242,4 +243,4 @@ function setStatus(
 
 loadTelegramWidget();
 
-checkSession();  
+checkSession();
