@@ -23,9 +23,14 @@ window.onTelegramAuth = async function (telegramUser) {
         }
 
         setStatus(
-            "Вы вошли в Y-FETISH",
-            "success"
-        );
+         "Вы вошли в Y-FETISH",
+          "success"
+         );
+
+alert("АВТОРИЗАЦИЯ УСПЕШНА. СЕЙЧАС БУДЕТ ПЕРЕХОД");
+
+window.location.href =
+    "https://lilyoldi.github.io/FETISH.Y/index.html";
 
         window.location.replace(
             "https://lilyoldi.github.io/FETISH.Y/index.html"
