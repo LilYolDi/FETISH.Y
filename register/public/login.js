@@ -68,24 +68,34 @@ window.onTelegramAuth = async function (telegramUser) {
         }
 
 
-        setStatus(
-            "Вы вошли в Y-FETISH",
-            "success"
+        if (data.success) {
+
+            setStatus(
+                "Вы вошли в Y-FETISH",
+                "success"
+            );
+
+
+            console.log(
+                "Переходим на:",
+                data.redirect
+            );
+
+
+            window.location.replace(
+                data.redirect
+            );
+
+            return;
+        }
+
+
+        throw new Error(
+            "Сервер не подтвердил авторизацию"
         );
 
 
-        /*
-         * Успешная авторизация.
-         * Переходим на главную страницу.
-         */
-
-        window.location.href =
-            "https://lilyoldi.github.io/FETISH.Y/index.html";
-
-    }
-
-
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "AUTH ERROR:",
@@ -98,7 +108,5 @@ window.onTelegramAuth = async function (telegramUser) {
             "Ошибка входа",
             "error"
         );
-
     }
-
 };
