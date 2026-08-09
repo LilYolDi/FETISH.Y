@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Y-FETISH — Вход</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login {
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        .red {
+            color: #e00000;
+        }
+
+        .login-box {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 14px;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            margin: 0 0 15px;
+        }
+
+        p {
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+
+        .telegram {
+            display: flex;
+            justify-content: center;
+            min-height: 50px;
+        }
+
+        #result {
+            margin-top: 20px;
+            color: #fff;
+            word-break: break-word;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login">
+
+    <div class="logo">
+        <span class="red">Y</span>-FETISH
+    </div>
+
+    <div class="login-box">
+
+        <h1>Вход</h1>
+
+        <p>Авторизуйтесь через Telegram</p>
+
+        <div class="telegram">
+
+            <script async
+                src="https://telegram.org/js/telegram-widget.js?22"
+                data-telegram-login="FETISH_Y_bot"
+                data-size="large"
+                data-userpic="true"
+                data-request-access="write"
+                data-onauth="onTelegramAuth(user)">
+            </script>
+
+        </div>
+
+        <div id="result"></div>
+
+    </div>
+
+</div>
+
+<script>
+function onTelegramAuth(user) {
+
+    const result = document.getElementById("result");
+
+    result.textContent = "Авторизация...";
+
+    fetch("/auth/telegram", {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(user)
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+
+            result.textContent =
+                "Вы вошли как " +
+                (
+                    data.user.username
+                        ? "@" + data.user.username
+                        : data.user.first_name
+                );
+
+        } else {
+
+            result.textContent =
+                "Ошибка: " + data.error;
+        }
+
+    })
+    .catch(error => {
+
+        console.error(error);
+
+        result.textContent =
+            "Ошибка соединения с сервером.";
+    });
+}
+</script>
+
+</body>
+</html>
