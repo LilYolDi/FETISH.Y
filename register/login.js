@@ -23,8 +23,9 @@ window.onTelegramAuth = async function (telegramUser) {
             "success"
         );
 
-        // Переходим на главную страницу
-        window.location.href = "/";
+        // Переходим на главную страницу Y-FETISH
+        window.location.href =
+            "https://lilyoldi.github.io/FETISH.Y/index.html";
 
     } catch (error) {
         console.error(error);
