@@ -43,13 +43,11 @@
         </div>
 
         <div class="side-menu">
-
             <div>⌂</div>
             <div>♡</div>
             <div>♙</div>
             <div>▣</div>
-            <div>⚙</div>
-
+            <div>⚙️</div>
         </div>
 
     </aside>
@@ -90,10 +88,12 @@
                 </p>
 
 
+                <!-- TELEGRAM -->
+
                 <div class="telegram-box">
 
                     <div class="telegram-icon">
-                        ✈
+                        ✈️
                     </div>
 
                     <h2>
@@ -109,10 +109,24 @@
                     <div
                         class="telegram-widget"
                         id="telegram-widget"
-                    ></div>
+                    >
+
+                        <script async
+                            src="https://telegram.org/js/telegram-widget.js?22"
+                            data-telegram-login="FETISH_Y_bot"
+                            data-size="large"
+                            data-userpic="false"
+                            data-request-access="write"
+                            data-onauth="onTelegramAuth(user)"
+                            data-lang="ru">
+                        </script>
+
+                    </div>
 
                 </div>
 
+
+                <!-- STATUS -->
 
                 <div
                     id="status"
@@ -121,6 +135,8 @@
                     Ожидание входа...
                 </div>
 
+
+                <!-- ACCOUNT -->
 
                 <div
                     id="account"
@@ -166,7 +182,10 @@
 </div>
 
 
+<!-- LOGIN JAVASCRIPT -->
+
 <script src="login.js"></script>
 
 </body>
+
 </html>
