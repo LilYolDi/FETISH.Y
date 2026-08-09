@@ -11,10 +11,7 @@ const PORT = process.env.PORT || 3000;
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 if (!BOT_TOKEN) {
-    console.error(
-        "ERROR: TELEGRAM_BOT_TOKEN is not set"
-    );
-
+    console.error("ERROR: TELEGRAM_BOT_TOKEN is not set");
     process.exit(1);
 }
 
@@ -38,12 +35,45 @@ app.use(
         cookie: {
             httpOnly: true,
             secure: true,
-            sameSite: "lax",
-            maxAge:
-                1000 * 60 * 60 * 24 * 7
+            sameSite: "none",
+            maxAge: 1000 * 60 * 60 * 24 * 7
         }
     })
 );
+
+
+// ========================================
+// CORS
+// ========================================
+
+app.use((req, res, next) => {
+
+    res.header(
+        "Access-Control-Allow-Origin",
+        "https://lilyoldi.github.io"
+    );
+
+    res.header(
+        "Access-Control-Allow-Credentials",
+        "true"
+    );
+
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+
+    res.header(
+        "Access-Control-Allow-Methods",
+        "GET,POST,PUT,DELETE,OPTIONS"
+    );
+
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(204);
+    }
+
+    next();
+});
 
 
 // ========================================
@@ -70,14 +100,9 @@ function verifyTelegram(data) {
     const receivedHash = data.hash;
 
     const checkData = Object.keys(data)
-        .filter(
-            key => key !== "hash"
-        )
+        .filter(key => key !== "hash")
         .sort()
-        .map(
-            key =>
-                ${key}=${data[key]}
-        )
+        .map(key => `${key}=${data[key]}`)
         .join("\n");
 
     const secretKey = crypto
@@ -93,31 +118,23 @@ function verifyTelegram(data) {
         .update(checkData)
         .digest("hex");
 
-    if (
-        calculatedHash !== receivedHash
-    ) {
+    if (calculatedHash !== receivedHash) {
         return false;
     }
 
-    const authDate =
-        Number(data.auth_date);
+    const authDate = Number(data.auth_date);
 
     if (!authDate) {
         return false;
     }
 
     const now =
-        Math.floor(
-            Date.now() / 1000
-        );
+        Math.floor(Date.now() / 1000);
 
     const age =
         now - authDate;
 
-    if (
-        age < 0 ||
-        age > 86400
-    ) {
+    if (age < 0 || age > 86400) {
         return false;
     }
 
@@ -135,14 +152,9 @@ app.post(
 
         try {
 
-            const telegramUser =
-                req.body;
+            const telegramUser = req.body;
 
-            if (
-                !verifyTelegram(
-                    telegramUser
-                )
-            ) {
+            if (!verifyTelegram(telegramUser)) {
 
                 return res
                     .status(401)
@@ -160,20 +172,16 @@ app.post(
                     telegramUser.id,
 
                 first_name:
-                    telegramUser.first_name ||
-                    "",
+                    telegramUser.first_name || "",
 
                 last_name:
-                    telegramUser.last_name ||
-                    "",
+                    telegramUser.last_name || "",
 
                 username:
-                    telegramUser.username ||
-                    "",
+                    telegramUser.username || "",
 
                 photo_url:
-                    telegramUser.photo_url ||
-                    ""
+                    telegramUser.photo_url || ""
             };
 
 
@@ -191,7 +199,12 @@ app.post(
                             .status(500)
                             .json({
                                 success: false,
-                                error:
+
+
+
+
+
+error:
                                     "Не удалось сохранить сессию"
                             });
                     }
@@ -202,12 +215,12 @@ app.post(
                         success: true,
 
                         user:
-                            req.session.user
+                            req.session.user,
 
+                        redirect:
+                            "https://lilyoldi.github.io/FETISH.Y/index.html"
 
-
-
-});
+                    });
                 }
             );
 
@@ -240,9 +253,7 @@ app.get(
     "/auth/me",
     (req, res) => {
 
-        if (
-            !req.session.user
-        ) {
+        if (!req.session.user) {
 
             return res.json({
                 loggedIn: false
@@ -285,11 +296,9 @@ app.post(
                         });
                 }
 
-
                 res.clearCookie(
                     "connect.sid"
                 );
-
 
                 return res.json({
                     success: true
@@ -308,19 +317,15 @@ app.get(
     "/api/profile",
     (req, res) => {
 
-        if (
-            !req.session.user
-        ) {
+        if (!req.session.user) {
 
             return res
                 .status(401)
                 .json({
-
                     error:
                         "Вы не авторизованы"
                 });
         }
-
 
         return res.json({
 
