@@ -2,13 +2,17 @@ window.onTelegramAuth = async function (telegramUser) {
     setStatus("Проверяем Telegram...");
 
     try {
-        const response = await fetch("/auth/telegram", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(telegramUser)
-        });
+        const response = await fetch(
+            "https://fetish-y.onrender.com/auth/telegram",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(telegramUser),
+                credentials: "include"
+            }
+        );
 
         const data = await response.json();
 
@@ -23,9 +27,10 @@ window.onTelegramAuth = async function (telegramUser) {
             "success"
         );
 
-        // Переходим на главную страницу Y-FETISH
-        window.location.href =
-            "https://lilyoldi.github.io/FETISH.Y/index.html";
+        setTimeout(function () {
+            window.location.href =
+                "https://lilyoldi.github.io/FETISH.Y/index.html";
+        }, 1000);
 
     } catch (error) {
         console.error(error);
