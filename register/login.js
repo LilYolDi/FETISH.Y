@@ -9,8 +9,8 @@ window.onTelegramAuth = async function (telegramUser) {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(telegramUser),
-                credentials: "include"
+                credentials: "include",
+                body: JSON.stringify(telegramUser)
             }
         );
 
@@ -27,10 +27,9 @@ window.onTelegramAuth = async function (telegramUser) {
             "success"
         );
 
-        setTimeout(function () {
-            window.location.href =
-                "https://lilyoldi.github.io/FETISH.Y/index.html";
-        }, 1000);
+        window.location.replace(
+            "https://lilyoldi.github.io/FETISH.Y/index.html"
+        );
 
     } catch (error) {
         console.error(error);
