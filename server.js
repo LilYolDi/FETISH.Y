@@ -6,6 +6,13 @@ require("dotenv").config();
 
 const app = express();
 
+app.get('/robots.txt', (req, res) => {
+    res.type('text/plain').send(`User-agent: *
+Allow: /
+
+Sitemap: https://y-fetish-y.onrender.com/sitemap.xml`);
+});
+
 const PORT = process.env.PORT || 3000;
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
