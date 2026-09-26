@@ -27,6 +27,9 @@ if (!BOT_TOKEN) {
 
 app.use(express.json());
 
+app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(
     session({
         secret:
